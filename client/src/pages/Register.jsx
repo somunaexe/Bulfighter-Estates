@@ -75,7 +75,14 @@ const Register = () => {
             required
             className='bg-primary border-none p-2 pl-4 rounded-md outline-none'
           />
-          <input type="file" id='image' name="profileImage" accept="image/*" hidden required/>
+          <input 
+            onChange={handleChange}
+            type="file" 
+            id='image' 
+            name="profileImage" 
+            accept="image/*" 
+            hidden 
+            required/>
           <label htmlFor="image">
             <div className='flexCenter ring-1 ring-slate-900/10 p-1 h-16 w-16 rounded'>
             {formData.profileImage ? (
