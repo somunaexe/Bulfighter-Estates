@@ -3,12 +3,15 @@ import cors from "cors"
 import mongoose from "mongoose"
 import "dotenv/config"
 import { connect } from "http2"
+import authRoutes from "./routes/auth.js"
 
 const app = express()
 app.use(express.json())
 app.use(cors())
 app.use(express.static("public"))
 
+//Routes
+app.use("/auth", authRoutes)
 
 // MongoDB connection
 const PORT = 4000;
