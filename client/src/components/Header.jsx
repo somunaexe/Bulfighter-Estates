@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Link, useNavigate } from "react-router-dom"
 import { FaSearch, FaUser } from "react-icons/fa"
 import { useDispatch, useSelector } from "react-redux"
-// import { setLogout } from "../redux/state"
+import { setLogout } from "../redux/state"
 
 const Header = () => {
 
@@ -15,11 +15,6 @@ const Header = () => {
   const toggleMenu = () => {
     setMenuOpened(!menuOpened)
   }
-
-  const toggleDropdown = () => {
-    setDropdownMenu(!dropdownMenu)
-  }
-
 
   return (
     <header className='max-padd-container flexBetween rounded-xl py-4'>
@@ -40,8 +35,11 @@ const Header = () => {
         </button>
       </div>
       {/* Dropdown Menu */}
-      <div>
-        <div>
+      <div className='flexBetween gap-x-10'>
+        <div 
+          onClick={()=> setDropdownMenu(!dropdownMenu)}
+          className='cursor-pointer relative'
+        >
           <div>
             {!user ? (
               <FaUser />
@@ -56,19 +54,19 @@ const Header = () => {
             )}
             </div>
             {dropdownMenu && !user && (
-              <div>
+              <div className='absolute top-16 right-0 w-40 p-4 rounded-3xl bg-white text-gray-30 medium-14 flex flex-col gap-y-2 shadow-md z-50'>
                 <Link to={"/login"}>Login</Link>
                 <Link to={"/register"}>Sign Up</Link>
               </div>
             )}
             {dropdownMenu && user && (
-              <div>
+              <div className='absolute top-16 right-0 w-40 p-4 rounded-3xl bg-white text-gray-30 medium-14 flex flex-col gap-y-2 shadow-md z-50'>
                 <Link to={`/create-listing`}>Add a Property</Link>
                 <Link to={`${user._id}/trips`}>Trips</Link>
                 <Link to={`${user._id}/wishlist`}>Wish List</Link>
                 <Link to={`${user._id}/properties`}>Properties</Link>
                 <Link to={`${user._id}/reservations`}>Reservations</Link>
-                {/* <Link to={"/login"} onClick={()=>{dispatch(setLogout)}}>Reservations</Link> */}
+                <Link to={"/login"} onClick={()=>{dispatch(setLogout())}}>Logout</Link>
               </div>
             )}
         </div>
