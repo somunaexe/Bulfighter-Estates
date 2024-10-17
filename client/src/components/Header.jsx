@@ -1,12 +1,16 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from "react-router-dom"
 import { FaSearch, FaUser } from "react-icons/fa"
+import { useDispatch, useSelector } from "react-redux"
+// import { setLogout } from "../redux/state"
 
 const Header = () => {
 
   const [menuOpened, setMenuOpened] = useState(false)
   const [dropdownMenu, setDropdownMenu] = useState(false)
+  const user = useSelector((state)=>state.user)
   const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   const toggleMenu = () => {
     setMenuOpened(!menuOpened)
@@ -38,7 +42,35 @@ const Header = () => {
       {/* Dropdown Menu */}
       <div>
         <div>
-          <div><FaUser /></div>
+          <div>
+            {!user ? (
+              <FaUser />
+            ) : (
+              <img 
+                src={`http://localhost:4000/${user.profileImagePath.replace("public", "")}`} 
+                alt="" 
+                height={47} 
+                width={47} 
+                className='rounded-full object-cover aspect-square'
+              />
+            )}
+            </div>
+            {dropdownMenu && !user && (
+              <div>
+                <Link to={"/login"}>Login</Link>
+                <Link to={"/register"}>Sign Up</Link>
+              </div>
+            )}
+            {dropdownMenu && user && (
+              <div>
+                <Link to={`/create-listing`}>Add a Property</Link>
+                <Link to={`${user._id}/trips`}>Trips</Link>
+                <Link to={`${user._id}/wishlist`}>Wish List</Link>
+                <Link to={`${user._id}/properties`}>Properties</Link>
+                <Link to={`${user._id}/reservations`}>Reservations</Link>
+                {/* <Link to={"/login"} onClick={()=>{dispatch(setLogout)}}>Reservations</Link> */}
+              </div>
+            )}
         </div>
       </div>
     </header>
