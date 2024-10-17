@@ -1,8 +1,11 @@
-import React, { useState } from 'react'
-import { Link } from "react-router-dom"
+import React, { useEffect, useState } from 'react'
+import { Link, useNavigate } from "react-router-dom"
 import { MdUpload } from "react-icons/md"
 
 const Register = () => {
+  const navigate = useNavigate()
+  const [passwordMatch, setPasswordMatch] = useState(true)
+
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -14,19 +17,45 @@ const Register = () => {
 
   const handleChange = (e) => {
     const {name, value, files} = e.target
-
     setFormData({
       ...formData,
       [name]: value,
       [name]: name === "profileImage" ? files[0] : value
     })
   }
-  console.log(formData)
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    try {
+      const register_form = new FormData()
+
+      for (var key in formData){
+        register_form.append(key, formData[key])
+      }
+      const response = await fetch("http://localhost:4000/auth/register", {
+        method: "POST",
+        body: register_form,
+      })
+      if(response.ok){
+        navigate("/login")
+      }
+    } catch (err) {
+      console.log("Registration failed", err.message)
+    }
+  }
+
+  useEffect(() => {
+    setPasswordMatch(
+      formData.password === formData.confirmPassword || formData.confirmPassword == ""
+    )
+  }, [formData.password, formData.confirmPassword])
+   
+  // console.log(formData)
   return (
     <div className='absolute h-full w-full bg-black/40 z-50 flexCenter'>
       <div>
         <form 
-          action="" 
+          onSubmit={handleSubmit}
           className='flex flex-col gap-y-2.5 bg-white w-[366px] p-7 rounded-xl shadow-md text-[14px]'
         >
           <h4 className='h3 my-4'>Sign Up</h4>
@@ -69,12 +98,13 @@ const Register = () => {
           <input 
             onChange={handleChange}
             value={formData.confirmPassword}
-            type="text" 
+            type="password" 
             name='confirmPassword' 
             placeholder='Confirm Password' 
             required
             className='bg-primary border-none p-2 pl-4 rounded-md outline-none'
           />
+          {!passwordMatch && <p>Passwords do not match</p>}
           <input 
             onChange={handleChange}
             type="file" 

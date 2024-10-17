@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
 import multer from "multer"
 import User from "../models/User.js"
+import path from "path"
 
 const router = express.Router()
 
@@ -12,7 +13,8 @@ const storage = multer.diskStorage({
         cb(null, "public/uploads/") //Storing the uploaded files in this folder
     },
     filename: function(req, file, cb){
-        cb(null, file.originalname) //Using the original file name
+        const ext = path.extname(file.originalname); // Get the file extension
+        cb(null, `${file.originalname}-${Date.now()}${ext}`); // Set the new filename
     }
 })
 
