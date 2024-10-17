@@ -22,7 +22,8 @@ const Header = () => {
       {/* {LOGO} */}
       <Link to={'/'} className='bold-24'>
         <div>
-          Bulfighter <span className='text-secondary'>Estates</span>
+          {/* //Bulfighter----------------------------- */}
+           <span className='text-secondary'>Estates</span>
         </div>
       </Link>
       {/* Searchable */}
